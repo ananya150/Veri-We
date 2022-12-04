@@ -26,6 +26,8 @@ contract Contract is UsingTellor {
     /// @dev The World ID group ID (always 1)
     uint256 internal immutable groupId = 1;
 
+    mapping(address => bool) public isUserVerified;
+
     /// @dev Whether a nullifier hash has been used already. Used to guarantee an action is only performed once by a single person
     mapping(uint256 => ENS) public nullifierHashes;
 
@@ -63,6 +65,7 @@ contract Contract is UsingTellor {
 
         // We now record the user has done this, so they can't do it again (proof of uniqueness)
         nullifierHashes[nullifierHash] = ENS(_ens, msg.sender);
+        isUserVerified[msg.sender] = true;
     }
 
     function toString(bytes memory data) public pure returns(string memory) {
